@@ -1,0 +1,112 @@
+﻿<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset = "utf-8">
+		<title>DOTA介紹</title>
+		<script src="external/jquery/jquery.js"></script>
+		<script src="jquery-ui.js"></script>
+		<link rel="stylesheet" type="text/css" href="style.css">
+		<style type = "text/css">
+		</style>
+		<script>
+			var myArr;
+			function loadData(){
+				var xmlhttp = new XMLHttpRequest();
+				var url;
+				
+				$('#search').keyup(function(){ 
+				   var searchWord = $('#search').val();
+				   refresh(myArr,searchWord);
+				});
+				url = "HOSData/HOSHero.html";
+				xmlhttp.onreadystatechange = function() {
+					if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+						myArr = JSON.parse(xmlhttp.responseText);
+						refresh(myArr,"");
+					}
+				};
+				xmlhttp.open("GET", url, true);
+				xmlhttp.send();
+			}
+			function refresh(arr,name){ 
+				var out = '<table>';
+				var i,j;
+				for(i = 0, j = 0; i < arr.length; i++) {
+					if(arr[i].Name.match(name)==null){
+						continue;
+					}
+					if(j%5==0)
+						out+="<tr>";
+					out += '<td><div class="buttonStyle" onclick="runEffect(\''+arr[i].Name+'\',\''+arr[i].NickName+'\',\''+arr[i].Background+'\');"><img  src="HOSData/'+arr[i].Name+'/'+arr[i].Name+'.png"><div class="more">'+arr[i].Name+'</div></div></td>';
+					if(j%5==4)
+						out+="</tr>";
+					j++;
+				}
+				if(j%5!=4)
+					out+="</tr>";
+				out+="</table>";
+				document.getElementById("content").innerHTML = out;
+			}
+			function callback2() {
+				if($("video").get(0).paused)
+					$("video").get(0).play();
+			}
+			function callback() {
+				$("#animate").attr("src","");
+				$("#animate").animate({marginLeft:"0px"},1000,callback2);
+				$("#animate").animate({marginTop:"0px"});
+				showInfo();
+			}
+			function runEffect2(){
+				$("#animate").animate({marginLeft: "1600px"},1000,callback);
+			}
+			
+			function runEffect(name, nickName, background) {
+				$("#animate").attr("src","HOSData/"+name+"/"+name+"1.jpg");
+				$("#showInfoDiv").empty();
+				$("#showInfoDiv").append("<h1>"+name+"</h1><h3>"+nickName+"</h3><p>"+background+'</p></div><video muted loop  src="HOSData/'+name+'/'+name+'2.webm" type="video/webm"></video>');
+				var offset = $("#animate").offset();
+				var topPadding = 40;
+				$("#animate").css("marginTop", $(window).scrollTop() - offset.top + topPadding);
+				$("#animate").animate({marginLeft:"800px"},1000,runEffect2);
+				
+			}
+			
+			function showInfo() {
+				var options = {};
+				options = { percent: 0 };
+				$("#showInfoDiv").dialog({
+					autoOpen: false,
+						position: {
+						at: "center top+30",
+						of: window
+					},
+					width: 1300,
+					show: {
+						effect: "blind",
+						duration: 1000
+					},
+					hide: {
+						effect: "explode",
+						duration: 1000
+					}
+				});
+				$("#showInfoDiv").dialog("open");
+			}
+			window.addEventListener("load", loadData, false);
+		</script>
+	</head>
+	<body>
+		<ul>
+			<li><a class="active" href="Home.html">Home</a></li>
+			<li><a href="Hero Of Storm.html"><img src="HOSData/LOGO.jpg"> Heroes of the Storm</a></li>
+			<li><a href="LOL.html"><img src="LOLData/LOGO.jpg"> League Of Legends</a></li>
+			<li><input type="text" id="search"/></li>
+		</ul>
+		<div id="showInfoDiv">
+		</div>
+		<div id="content">
+		</div>
+		<img id="animate">
+	</body>
+</html>
