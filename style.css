@@ -1,0 +1,146 @@
+body	{
+	background:#444455;
+	background:linear-gradient(left,#444455,#000011);
+	background:-moz-linear-gradient(left,#444455,#000011);
+	background:-webkit-linear-gradient(left,#444455,#000011);
+}
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+}
+
+h1,h2,h3,h4,h5	{
+	margin-left: 15px;
+	margin-right: 15px;
+
+	color: white;
+}
+h1 img	{
+	width: 30px;
+}
+
+
+li {
+    float: left;
+}
+
+li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+li a:hover {
+    background-color: #111;
+}
+
+li img{
+	width:20px;
+	vertical-align : middle;
+}
+
+li input{
+	width:500px;
+}
+
+table	{
+	width: 75%;
+	margin-left: 15%;
+}
+
+td	{
+	height: 170px;
+	width: 130px;
+	text-align: center;
+}
+td img	{
+	width: 130px;
+}
+
+.more	{
+	display: none;
+	position:relative;
+	z-index:2;
+	margin-top:-50px;
+	color: white;
+	font-weight: bold;
+	font-size: 25px;
+}
+
+.buttonStyle	{
+    position: relative;
+	width: 100px;
+}
+
+.buttonStyle:hover img{
+	-webkit-filter:brightness(0.5);
+}
+
+.buttonStyle:hover	.more{
+	position: absolute;
+	display: block;
+	width: 130px;
+}
+
+#animate	{
+	position:absolute;
+	z-index:3;
+	margin-left: -300px;
+}
+
+#showInfoDiv {
+	position:absolute;
+	z-index:2;
+	display: none;
+	width: 1000px;
+	border-style: outset;
+	background:#444455;
+	background:linear-gradient(left,#444455,#000011);
+	background:-moz-linear-gradient(left,#444455,#000011);
+	background:-webkit-linear-gradient(left,#444455,#000011);
+	overflow:scroll;
+}
+
+#showInfoDiv p,h1,h3{
+	color: #fff;
+}
+
+
+
+
+/*image slider*/
+.container {
+  max-width: 750px;
+  background-color: black;
+  margin: 0 auto;
+  text-align: center;
+  position: relative;
+}
+.container div {
+  background-color: white;
+  width: 100%;
+  display: inline-block;
+  display: none;
+}
+.container img {
+  width: 100%;
+  height: auto;
+}
+
+button {
+  position: absolute;
+}
+
+.next {
+  right: 5px;
+}
+
+.prev {
+  left: 5px;
+}
+/*image slider*/

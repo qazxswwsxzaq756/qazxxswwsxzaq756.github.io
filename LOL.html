@@ -1,0 +1,160 @@
+﻿<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset = "utf-8">
+		<title>DOTA介紹</title>
+		<script src="external/jquery/jquery.js"></script>
+		<script src="jquery-ui.js"></script>
+		<link rel="stylesheet" type="text/css" href="style.css">
+		<style type = "text/css">
+		</style>
+		<script>
+			var currentIndex = 0, items, itemAmt;
+			var myArr;
+			function loadData(){
+				var xmlhttp = new XMLHttpRequest();
+				var url;
+				
+				$('#search').keyup(function(){ 
+				   var searchWord = $('#search').val();
+				   refresh(myArr,searchWord);
+				});
+				
+				$('.next').click(function() {
+					
+					currentIndex += 1;
+					if (currentIndex > itemAmt - 1) {
+					currentIndex = 0;
+					}
+					cycleItems();
+				});
+
+				$('.prev').click(function() {
+				
+					currentIndex -= 1;
+					if (currentIndex < 0) {
+					currentIndex = itemAmt - 1;
+					}
+					cycleItems();
+				});
+			
+
+				
+				
+				url = "LOLData/LOLHero.html";
+				xmlhttp.onreadystatechange = function() {
+					if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+						myArr = JSON.parse(xmlhttp.responseText);
+						refresh(myArr);
+					}
+				};
+				xmlhttp.open("GET", url, true);
+				xmlhttp.send();
+			}
+			function refresh(arr,name){ 
+				var out = '<table>';
+				var i,j;
+				for(i = 0, j = 0; i < arr.length; i++) {
+					if(arr[i].Name.match(name)==null){
+						continue;
+					}
+					if(j%5==0)
+						out+="<tr>";
+					out += '<td><div class="buttonStyle" onclick="runEffect(\''+arr[i].Name+'\',\''+arr[i].NickName+'\',\''+arr[i].Background+'\','+arr[i].Number+');"><img  src="LOLData/'+arr[i].Name+'/'+arr[i].Name+'.jpg"><div class="more">'+arr[i].Name+'</div></div></td>';
+					if(j%5==4)
+						out+="</tr>";
+					j++;
+				}
+				if(j%5!=4)
+					out+="</tr>";
+				out+="</table>";
+				document.getElementById("content").innerHTML = out;
+			}
+
+			function callback() {
+				$("#animate").attr("src","");
+				$("#animate").animate({marginLeft:"-300px"});
+				$("#animate").animate({marginTop:"0px"});
+				showInfo();
+			}
+			
+			function runEffect2() {
+				$("#animate").animate({marginLeft: "1000px"},1000,callback);
+			}
+			
+			function runEffect(name, nickName, background, number) {
+				var i;
+				$("#animate").attr("src","LOLData/"+name+"/"+name+"0.jpg");
+				$("#heroInfo").html("<h1>"+name+"</h1><h3>"+nickName+"</h3><p>"+background+'</p></div>');
+				$(".container").empty();
+				$(".container").append('<div style="display: inline-block;"><img src="LOLData/'+name+'/'+name+'0.jpg"/></div>');
+				for(i=1; i<number; ++i)
+					$(".container").append('<div><img src="LOLData/'+name+'/'+name+i+'.jpg"/></div>');
+								items = $('.container div'),
+				itemAmt = items.length;
+				
+				var offset = $("#animate").offset();
+				var topPadding = 40;
+
+				$("#animate").css("marginTop", $(window).scrollTop() - offset.top + topPadding);
+				$("#animate").animate({marginLeft:"350px"},1000,runEffect2);
+				$("audio").attr("src","LOLData/"+name+"/"+name+".mp3");
+			}
+			
+			function showInfo() {
+				var options = {};
+				options = { percent: 0 };
+					$("#showInfoDiv").dialog({
+						autoOpen: false,
+						position: {
+						at: "center top+30",
+						of: window
+					},
+					width: 1300,
+					height: 600,
+					show: {
+						effect: "blind",
+						duration: 1000
+					},
+					hide: {
+						effect: "explode",
+						duration: 1000
+					}
+				});
+				$("#showInfoDiv").dialog("open");
+			}
+			function cycleItems() {
+			  var item = $('.container div').eq(currentIndex);
+			  items.hide();
+			  item.css('display','inline-block');
+			}
+
+			
+			
+			
+			window.addEventListener("load", loadData, false);
+		</script>
+	</head>
+	<body>
+		<ul>
+			<li><a class="active" href="Home.html">Home</a></li>
+			<li><a href="Hero Of Storm.html"><img src="HOSData/LOGO.jpg"> Heroes of the Storm</a></li>
+			<li><a href="LOL.html"><img src="LOLData/LOGO.jpg"> League Of Legends</a></li>
+			<li><input type="text" id="search"/></li>
+		</ul>
+		<img id="animate">
+		<div id="showInfoDiv">
+			<section class="demo">
+				<button class="next">Next</button>
+				<button class="prev">Previous</button>
+				<div class="container">
+				</div>
+			</section>
+			<div id="heroInfo"></div>
+		</div>
+		<div id="content">
+		</div>
+		<audio autoplay>
+		</audio>
+	</body>
+</html>
